@@ -52,7 +52,7 @@ await until(base, async () => {
  * decided by `ENVIRONMENT`, and `apps/web` reads that from a configuration flattened at
  * *build* time: a build with `CLOUDFLARE_ENV` unset produces a Worker named `orator-web`
  * carrying `ENVIRONMENT: "local"`, which has happened once already and is written up in
- * CLAUDE.md. Today that mistake would put `Disallow: /` and `noindex` on every page of the
+ * AGENTS.md. Today that mistake would put `Disallow: /` and `noindex` on every page of the
  * production site, which answers 200 throughout and looks entirely healthy — and the cost
  * is measured in the weeks it takes to be crawled back, not in a redeploy.
  *

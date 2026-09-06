@@ -117,7 +117,7 @@ unset PEPPER
 
 `--name` for the web Worker rather than `--env`: after a build, `apps/web/dist/server/
 wrangler.json` is a flattened production configuration and `--env` has nothing to apply to
-(CLAUDE.md, "The web Worker's environment is chosen at *build* time").
+(AGENTS.md, "The web Worker's environment is chosen at *build* time").
 
 ### The staging export in the git history
 

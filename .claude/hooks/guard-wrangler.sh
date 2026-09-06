@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Production is deployed by GitHub Actions, and by nothing else (CLAUDE.md, AGENTS.md).
+# Production is deployed by GitHub Actions, and by nothing else (AGENTS.md, "Deployment").
 #
 # Written after a local `wrangler deploy` reached the production `orator-web` script on
 # 2026-08-29. The command was:
@@ -58,7 +58,7 @@ deny() {
 }
 
 PUSH_TO_MAIN='Production is released by pushing to main — ci → staging → production runs on
-every push (CLAUDE.md, "Pushing to main deploys to production"). Commit the work, get
+every push (AGENTS.md, "Pushing to `main` deploys to production"). Commit the work, get
 `pnpm check` green, and push. Do not deploy from here.'
 
 # --- 1. The wrapper, first, because it is the failure that happened -----------------------
@@ -94,7 +94,7 @@ fi
 
 # --- 2a. Reading is not deploying, in any environment -------------------------------------
 #
-# `wrangler tail` against production is how a live incident gets diagnosed (CLAUDE.md names it
+# `wrangler tail` against production is how a live incident gets diagnosed (AGENTS.md names it
 # as the tool for exactly that), and so are the listing commands. They name production because
 # that is the thing being looked at.
 #

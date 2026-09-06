@@ -100,6 +100,6 @@ A `--full` shot of the feed is tens of thousands of pixels tall and gets downsam
 something unreadable before it reaches the model. Use it to judge the shape of a page; use
 the default fold shot, or `--clip`, to judge anything smaller than a section.
 
-`--base local` needs `pnpm dev` running, and CLAUDE.md's warning about a stale dev server
+`--base local` needs `pnpm dev` running, and AGENTS.md's warning about a stale dev server
 applies: a screenshot of a Vite module graph from before the edit looks exactly like a change
 that did nothing.
