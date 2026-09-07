@@ -5012,10 +5012,22 @@ select:focus-visible {
   max-width: var(--measure);
 }
 
+/*
+ * Two verbs on one line, and they have to look like it.
+ *
+ * "No action" is a separate `<form>` because it posts a different action, not because it is
+ * a different kind of choice — and that structural necessity was leaking into the layout.
+ * The row bottom-aligned its two forms, but `Apply` is centred inside a line whose height
+ * comes from the selects beside it, so its own bottom sits above its form's. The two buttons
+ * ended up six pixels apart: close enough to read as a mistake rather than as a distinction.
+ *
+ * Centred, because that is what the row is — one line of controls, not a stack resting on a
+ * baseline.
+ */
 .report__actions {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
+  align-items: center;
   gap: 0.75rem;
   margin-top: 0.75rem;
 }
