@@ -172,6 +172,27 @@ const result = await accountView(ctx, session.sessionId);
 if (result.ok) view = result.value;
 
 /*
+ * The masthead reads the same reader, and the middleware read them before this page wrote.
+ *
+ * `Astro.locals.viewer` is resolved once per request, ahead of any handler, so on the response
+ * to a POST that changes the picture it is a snapshot from before the change — and the mark
+ * in the bar would be the removed one until the reader navigated somewhere else. This page is
+ * the only surface that can change it, and it has just re-read the record for its own
+ * rendering, so the correction costs nothing.
+ *
+ * Assigned from `view.principal` rather than re-read: two reads of one row inside one request
+ * is how a page ends up showing two different answers to the same question.
+ */
+if (Astro.locals.viewer !== undefined && view !== null) {
+  Astro.locals.viewer = {
+    ...Astro.locals.viewer,
+    displayName: view.principal.displayName,
+    kind: view.principal.kind,
+    avatarMediaId: view.principal.avatarMediaId ?? null,
+  };
+}
+
+/*
  * Which section, from the URL and nowhere else (§49.2).
  *
  * An unknown value falls back rather than 404ing: a tab is a view of one page, and a
