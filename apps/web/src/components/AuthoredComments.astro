@@ -33,8 +33,9 @@ const STANCE_LABEL: Record<string, string> = {
   summarizes: "summarises",
 };
 
+/* Short month, as in a thread: the same fact now sits in the same kind of line. */
 const date = (at: string) =>
-  new Date(at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  new Date(at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 ---
 
 {page.comments.length === 0 ? (
@@ -47,6 +48,10 @@ const date = (at: string) =>
           <span class="authored__verb">{comment.stance ? STANCE_LABEL[comment.stance] ?? comment.stance : "on"}</span>
           <a href={`/p/${comment.article.id}`}>{comment.article.title}</a>
           <span class="authored__by">by @{comment.article.authorUsername}</span>
+          {/* §49.2 — the date is the permalink, in the line the rest of the metadata is in. */}
+          <a class="authored__when" href={`/p/${comment.article.id}#c-${comment.id}`}>
+            <time datetime={comment.createdAt}>{date(comment.createdAt)}</time>
+          </a>
         </p>
 
         {comment.body === null ? (
@@ -55,12 +60,6 @@ const date = (at: string) =>
         ) : (
           <div class="prose prose--tight" set:html={renderCommentBody(comment.body, { siteHost })} />
         )}
-
-        <p class="authored__when">
-          <a href={`/p/${comment.article.id}#c-${comment.id}`}>
-            <time datetime={comment.createdAt}>{date(comment.createdAt)}</time>
-          </a>
-        </p>
       </li>
     ))}
   </ul>

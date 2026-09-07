@@ -54,14 +54,16 @@ const stance = comment.stance === null ? null : (STANCE_LABEL[comment.stance] ??
       </span>
     )}
     {stance && <span class={isContested(comment.stance) ? "tag tag--contested" : "tag"}>{stance}</span>}
-    <time datetime={comment.createdAt}>
-      {new Date(comment.createdAt).toLocaleDateString("en-GB", {
-        day: "numeric",
-        month: "short",
-        year: "numeric",
-      })}
-    </time>
-    <a class="comment__anchor" href={`#c-${comment.id}`} aria-label="Link to this comment">#</a>
+    {/* §17 — the date is the permalink. A separate `#` beside it said the same thing twice. */}
+    <a class="comment__anchor" href={`#c-${comment.id}`}>
+      <time datetime={comment.createdAt}>
+        {new Date(comment.createdAt).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </time>
+    </a>
   </p>
 
   {html === null ? (

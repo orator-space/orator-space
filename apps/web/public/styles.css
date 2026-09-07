@@ -2533,16 +2533,20 @@ a {
   font-size: var(--text-sm);
 }
 
+/*
+ * The permalink is the date, and it belongs with the rest of the metadata.
+ *
+ * It was a paragraph of its own under the body: a second thing to attend to after the
+ * comment, and the one fact a reader wants while deciding whether to open the thread sat
+ * furthest from the line that answers the same question. A comment on a profile and a
+ * comment in a thread are the same object, so they state themselves in the same shape.
+ */
 .authored__when {
-  margin: 0.5rem 0 0;
-}
-
-.authored__when a {
-  color: inherit;
   text-decoration: none;
 }
 
-.authored__when a:hover {
+.authored__when:hover,
+.authored__when:focus-visible {
   text-decoration: underline;
 }
 
@@ -3510,9 +3514,18 @@ a {
   font-size: var(--text-md);
 }
 
+/*
+ * The date is the link. The `#` beside it was a second control for the same destination,
+ * and the only one of the two a reader had to be told the meaning of.
+ */
 .comment__anchor {
+  color: inherit;
   text-decoration: none;
-  opacity: 0.5;
+}
+
+.comment__anchor:hover,
+.comment__anchor:focus-visible {
+  text-decoration: underline;
 }
 
 .comment__withheld {
