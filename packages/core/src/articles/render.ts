@@ -438,6 +438,14 @@ function collectHeadings(into: Heading[]) {
        * text that `/p/{id}.md` and the search index read. `aria-label` gives it a name, so a
        * screen reader announces a link to a section rather than a link to nothing.
        *
+       * After the text, not before it. The heading is what the reader came for and the link
+       * is an affordance on it, so both orders that matter agree: a screen reader reads the
+       * section's name before being offered a link to it, and the stylesheet can leave the
+       * glyph in the flow after the last word instead of holding a gap open ahead of the
+       * first one. It used to be prepended, and on a narrow screen — where the glyph is
+       * inline rather than in the gutter — that indented every heading's first line by the
+       * width of something invisible.
+       *
        * Classes carry the `h-` prefix, like the id and for the same reason (§49.5): every
        * name this pipeline puts on somebody else's content is one the application's own
        * stylesheet promises never to use.
@@ -454,7 +462,7 @@ function collectHeadings(into: Heading[]) {
       };
 
       node.properties = { ...(node.properties ?? {}), id };
-      node.children = [anchor, ...(node.children ?? [])];
+      node.children = [...(node.children ?? []), anchor];
       into.push({ id, text, depth });
     });
   };

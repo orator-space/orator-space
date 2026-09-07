@@ -2831,15 +2831,22 @@ a {
  * the way a fetched image could not.
  *
  * Invisible until the heading is hovered or the link itself is focused — a chain icon beside
- * every heading of a long article is a column of furniture down the left of the text. Focus
- * is separate from hover on purpose: it is how a keyboard reaches it at all.
+ * every heading of a long article is a column of furniture running down the text. Focus is
+ * separate from hover on purpose: it is how a keyboard reaches it at all.
+ *
+ * After the last word, at every width. It used to hang in the left gutter above 76rem and go
+ * inline below that, which made two problems out of one decision: the gutter version sat
+ * `1.75rem` left of a glyph `1em` wide, so what a reader saw was a chain jammed against the
+ * capital; and the inline version came *before* the text in the markup, so on a phone every
+ * heading's first line was indented by the width of something with no opacity. The renderer
+ * now appends it, and this is one rule for one behaviour.
  */
 .h-anchor {
   display: inline-block;
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.1em;
-  margin-left: 0.35rem;
+  width: 0.75em;
+  height: 0.75em;
+  vertical-align: baseline;
+  margin-left: 0.5rem;
   background-color: var(--ink-soft);
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -2857,20 +2864,18 @@ a {
 }
 
 /*
- * Outside the column on a wide screen, where the gutter has room for it, and after the text
- * on a narrow one, where it does not. At 390px the page's own margin is 20px, and a glyph
- * hung 1.6rem to the left of the text would be off the side of the phone.
+ * On a device that cannot hover, it is simply there.
+ *
+ * Hover is the whole mechanism that reveals this, and a touch screen has none: the only way
+ * to find the link was to tap the heading and discover that tapping did something. `hover:
+ * none` is the property that actually decides it — narrower than a width query, which would
+ * hide the link on a small window of a desktop browser and show it on a large tablet.
+ *
+ * Muted rather than removed from the flow, so a column of headings still reads as headings.
  */
-@media (min-width: 76rem) {
-  .prose :is(h2, h3, h4, h5, h6) {
-    position: relative;
-  }
-
+@media (hover: none) {
   .h-anchor {
-    position: absolute;
-    left: -1.75rem;
-    top: 0.15em;
-    margin-left: 0;
+    opacity: 0.45;
   }
 }
 

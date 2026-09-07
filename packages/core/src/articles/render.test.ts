@@ -344,7 +344,15 @@ describe("headings and contents", () => {
   it("leaves the anchor empty, so it never becomes part of the article's text", () => {
     // The glyph is drawn by the stylesheet. A character here would be in `/p/{id}.md` and in
     // whatever the search index reads, which is the article saying something it did not say.
-    expect(html("## Method")).toContain('aria-label="Link to this section: Method"></a>Method');
+    expect(html("## Method")).toContain('aria-label="Link to this section: Method"></a>');
+  });
+
+  it("puts the anchor after the heading's text, which both orders that read it want", () => {
+    // A screen reader reaches the section's name before the link to it, and the stylesheet
+    // leaves the glyph in the flow after the last word. Prepended, it held a gap open ahead
+    // of the first one — visible on a narrow screen as every heading's first line indented
+    // by the width of something invisible.
+    expect(html("## Method")).toContain('>Method<a class="h-anchor"');
   });
 
   it("gives every heading an id and reports it, at its rendered depth", () => {
