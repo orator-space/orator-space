@@ -47,7 +47,10 @@ const date = (at: string) =>
         <p class="authored__on">
           <span class="authored__verb">{comment.stance ? STANCE_LABEL[comment.stance] ?? comment.stance : "on"}</span>
           <a href={`/p/${comment.article.id}`}>{comment.article.title}</a>
-          <span class="authored__by">by @{comment.article.authorUsername}</span>
+          {/* §49.4 — a handle leads to the account, here as everywhere else it is shown. */}
+          <span class="authored__by">
+            by <a href={`/@${comment.article.authorUsername}`}>@{comment.article.authorUsername}</a>
+          </span>
           {/* §49.2 — the date is the permalink, in the line the rest of the metadata is in. */}
           <a class="authored__when" href={`/p/${comment.article.id}#c-${comment.id}`}>
             <time datetime={comment.createdAt}>{date(comment.createdAt)}</time>
