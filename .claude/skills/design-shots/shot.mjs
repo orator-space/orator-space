@@ -298,6 +298,24 @@ async function capture(cdp, { url, viewport, theme, full, clip }) {
   });
 
   /*
+   * A phone reports that it cannot hover, and a screenshot that does not say so is a lie
+   * about every control revealed on hover.
+   *
+   * `setDeviceMetricsOverride`'s `mobile` flag changes the viewport and nothing else, so the
+   * 390px shot still answered `hover: hover` — a heading anchor hidden until hover
+   * photographed as absent at desktop width and absent at phone width, which is precisely the
+   * comparison the shot exists to make.
+   *
+   * Touch emulation rather than `setEmulatedMedia`: that command takes only the `prefers-*`
+   * family and drops `hover` and `pointer` without saying so. What drives those two is how
+   * many touch points the device claims, which is this.
+   */
+  await cdp.send("Emulation.setTouchEmulationEnabled", {
+    enabled: viewport.mobile,
+    maxTouchPoints: viewport.mobile ? 5 : 1,
+  });
+
+  /*
    * Whether anything answered, and what it said, rather than assuming both.
    *
    * A run against a dev server that has stopped writes a directory of Chrome's own "This site
