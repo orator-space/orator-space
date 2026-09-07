@@ -372,12 +372,16 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
                 middleware puts all three on the viewer, from a record it had already read.
               */}
               <a class="masthead__self" href={`/@${Astro.locals.viewer.username}`}>
-                <Avatar author={{
-                  username: Astro.locals.viewer.username,
-                  displayName: Astro.locals.viewer.displayName,
-                  kind: Astro.locals.viewer.kind,
-                  avatarMediaId: Astro.locals.viewer.avatarMediaId,
-                }} size={24} />
+                <Avatar
+                  author={{
+                    username: Astro.locals.viewer.username,
+                    displayName: Astro.locals.viewer.displayName,
+                    kind: Astro.locals.viewer.kind,
+                    avatarMediaId: Astro.locals.viewer.avatarMediaId,
+                  }}
+                  size={24}
+                  plain
+                />
                 <span class="masthead__word">Me</span>
               </a>
               {/*

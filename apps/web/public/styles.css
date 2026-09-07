@@ -900,18 +900,42 @@ a {
   }
 }
 
-/* The avatar keeps its circle: `flex: none` so a full bar cannot squash it into an ellipse. */
+/*
+ * Every mark in the navigation is the same size, and the panel is why.
+ *
+ * Below 68rem this is a column of rows, each a mark and a word, and the word's left edge is
+ * decided by the width of the mark before it. Three sizes were in play — 1.05rem for the
+ * icons, 1.15rem for the cog, 1.5rem for the avatar — so three rows in a column of five each
+ * started at a different x. Nothing about that is visible in a bar and all of it is visible
+ * in a list.
+ *
+ * `flex: none` on the avatar for the reason every avatar on this site has it: an SVG with a
+ * viewBox is otherwise happy to be squeezed into an ellipse by a full row.
+ */
 .masthead__self .avatar {
   flex: none;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
-/* A cog reads heavier than an outline of a person at the same weight, so it is drawn lighter. */
-.masthead__cog .icon {
-  width: 1.15rem;
-  height: 1.15rem;
-  stroke-width: 1.5;
+/*
+ * In the bar they are bigger, because there they stand alone.
+ *
+ * Above 68rem the word beside each of these is clipped, so the mark is the whole of the
+ * control and there is no text baseline for it to line up against — the constraint that made
+ * them equal downstairs does not exist here, and 17px of avatar is a face nobody can make out.
+ */
+@media (min-width: 68rem) {
+  .masthead__self .avatar {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .masthead__cog .icon,
+  .masthead__self .icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 }
 
 /*
@@ -5064,6 +5088,28 @@ select:focus-visible {
   flex: none;
   border-radius: 50%;
   vertical-align: middle;
+}
+
+/*
+ * The placeholder: the site's `person` mark on a grey ground (SPEC §49.4).
+ *
+ * Used where the account is already named and there is nobody to tell it apart from — the
+ * masthead, which is the reader's own. The generated mark goes on doing its job everywhere
+ * else; the argument for having two is on the `plain` prop in `Avatar.astro`.
+ *
+ * Stroked at 2.4 in a 40-unit box, which is 1.4px at the 24px this is drawn at — the weight
+ * `.icon` carries, so the placeholder and the `person` icon beside it in the same bar are
+ * plainly one drawing.
+ */
+.avatar--plain .avatar__ground {
+  fill: var(--paper-soft);
+}
+
+.avatar--plain .avatar__figure {
+  fill: none;
+  stroke: var(--ink-soft);
+  stroke-width: 2.4;
+  stroke-linecap: round;
 }
 
 /*

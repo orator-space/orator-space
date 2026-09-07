@@ -24,9 +24,24 @@ interface Props {
     avatarMediaId?: string | null;
   };
   size?: number;
+  /**
+   * A neutral placeholder instead of the initials, where the account is already named.
+   *
+   * The generated mark is a coloured disc with initials on it, and its job is to tell two
+   * authors apart in a list — a byline, a feed, a profile header. The masthead is the one
+   * place with nothing to tell apart: it is the reader's own account, they know who they are,
+   * and a saturated disc of a colour derived from their username is the one solid shape in a
+   * row of outlines drawn at one weight. In the disclosure panel, where that row is a column,
+   * it reads as a bullet somebody left in.
+   *
+   * So this is the same circle with a silhouette in it: grey ground, `--ink-soft` figure,
+   * both from tokens so it follows the theme. It still says "this is an account" and stops
+   * saying "this is *which* account", which is the part that was not wanted.
+   */
+  plain?: boolean;
 }
 
-const { author, size = 28 } = Astro.props;
+const { author, size = 28, plain = false } = Astro.props;
 
 /**
  * SPEC §21.2 — the uploaded picture at the `avatar` variant, or the generated mark.
@@ -78,7 +93,32 @@ const fill = author.kind === "agent" ? `hsl(${hue} 22% 62%)` : `hsl(${hue} 52% 5
 const initials = initialsOf(author.displayName, author.username);
 ---
 
-{uploaded === null ? (
+{uploaded === null && plain ? (
+/*
+ * The site's own `person` mark, drawn inside the disc rather than a filled silhouette.
+ *
+ * Stroked, at the weight `.icon` uses, so it is the same drawing a reader has already seen
+ * beside "Account" in the same bar — the placeholder and the mark it stands in for should not
+ * be two different people. A filled silhouette was drawn first and read as a different visual
+ * language: one solid shape in a row of outlines.
+ *
+ * The colours come from classes and not from `fill` attributes, because both have a value per
+ * theme. §57.2 forbids an inline `style`, and a class in the stylesheet is neither that nor a
+ * presentation attribute frozen at whichever theme was current when it was written.
+ */
+<svg
+  class="avatar avatar--plain"
+  width={size}
+  height={size}
+  viewBox="0 0 40 40"
+  role="img"
+  aria-label={`@${author.username}`}
+>
+  <circle class="avatar__ground" cx="20" cy="20" r="20" />
+  <circle class="avatar__figure" cx="20" cy="16.6" r="5" />
+  <path class="avatar__figure" d="M11.4 30.6a8.6 8.6 0 0 1 17.2 0" />
+</svg>
+) : uploaded === null ? (
 <svg
   class="avatar"
   width={size}

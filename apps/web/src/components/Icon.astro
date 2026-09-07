@@ -45,26 +45,25 @@ const ICONS: Record<string, Shape[]> = {
     { d: "M4.5 5.5a14 14 0 0 1 14 14" },
   ],
   /*
-   * A cog, not a pair of sliders.
+   * Sliders, and a cog was tried twice.
    *
-   * The sliders were the better mark while `Settings` was a word in a row of words: two rows
-   * with a handle on each says "things you adjust", which is what that page is. It stopped
-   * being the better mark when the masthead dropped the word — an icon standing alone has to
-   * be recognised rather than read, and the cog is the one shape every reader already knows
-   * means this. The heading on `/settings` uses the same name, so the two agree.
+   * The masthead shows this one without a word beside it, which is the case that argues for a
+   * cog: an icon standing alone has to be recognised rather than read, and a cog is the shape
+   * everybody knows. Two were drawn — eight straight-segment teeth, then six arcs — and both
+   * were rejected on sight at the size they are actually used. A cog is a shape whose whole
+   * character is in the teeth, and at 17px with a 1.6 stroke there is no room for a tooth
+   * that is not either a bump or a blob.
    *
-   * Six teeth, not eight, and drawn as arcs rather than as a polygon. The first version was a
-   * hand-written eight-tooth outline of straight segments: at 17px the teeth were shorter than
-   * the stroke is wide, so `stroke-linejoin: round` rounded them into each other and the mark
-   * read as a lumpy circle. Six teeth at 9.3 and 6.5 with a 46% duty cycle leaves a gap wide
-   * enough to survive the join, and the outer arc is a real arc, so the silhouette is a wheel
-   * rather than a hexagon.
+   * These say the same thing a different way: two rows with a handle on each, meaning things
+   * you adjust, which is what that page is. They are drawn from the same vocabulary as every
+   * other mark here — straight lines and circles at one weight — so they sit in a row with
+   * `topics` and `bookmarks` instead of being the one detailed drawing among them. The
+   * heading on `/settings` uses the same name, so the two agree.
    */
   settings: [
-    {
-      d: "M9.78 2.97A9.3 9.3 0 0 1 14.22 2.97L13.55 5.69A6.5 6.5 0 0 1 16.69 7.5L18.71 5.56A9.3 9.3 0 0 1 20.93 9.41L18.24 10.19A6.5 6.5 0 0 1 18.24 13.81L20.93 14.59A9.3 9.3 0 0 1 18.71 18.44L16.69 16.5A6.5 6.5 0 0 1 13.55 18.31L14.22 21.03A9.3 9.3 0 0 1 9.78 21.03L10.45 18.31A6.5 6.5 0 0 1 7.31 16.5L5.29 18.44A9.3 9.3 0 0 1 3.07 14.59L5.76 13.81A6.5 6.5 0 0 1 5.76 10.19L3.07 9.41A9.3 9.3 0 0 1 5.29 5.56L7.31 7.5A6.5 6.5 0 0 1 10.45 5.69Z",
-    },
-    { circle: [12, 12, 2.6] },
+    { d: "M4 7.5h8M17 7.5h3M4 16.5h3M12 16.5h8" },
+    { circle: [14.5, 7.5, 2.2] },
+    { circle: [9.5, 16.5, 2.2] },
   ],
   /* A report is a warning about something, not a verdict on it — a triangle, not a flag. */
   report: [{ d: "M12 4.2 2.8 20h18.4L12 4.2Z" }, { d: "M12 10.5v4M12 17.4v.01" }],
