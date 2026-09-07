@@ -53,15 +53,18 @@ const ICONS: Record<string, Shape[]> = {
    * be recognised rather than read, and the cog is the one shape every reader already knows
    * means this. The heading on `/settings` uses the same name, so the two agree.
    *
-   * Eight teeth as one path, because a stroked polygon closes on itself and a `circle` in the
-   * middle gives the hole. `stroke-linejoin: round` on `.icon` is what keeps the corners from
-   * reading as spikes at 17px.
+   * Six teeth, not eight, and drawn as arcs rather than as a polygon. The first version was a
+   * hand-written eight-tooth outline of straight segments: at 17px the teeth were shorter than
+   * the stroke is wide, so `stroke-linejoin: round` rounded them into each other and the mark
+   * read as a lumpy circle. Six teeth at 9.3 and 6.5 with a 46% duty cycle leaves a gap wide
+   * enough to survive the join, and the outer arc is a real arc, so the silhouette is a wheel
+   * rather than a hexagon.
    */
   settings: [
     {
-      d: "M11.1 3.2h1.8l.35 2.06a6.9 6.9 0 0 1 1.72.72l1.7-1.22 1.27 1.27-1.22 1.7c.31.53.55 1.1.72 1.72l2.06.35v1.8l-2.06.35a6.9 6.9 0 0 1-.72 1.72l1.22 1.7-1.27 1.27-1.7-1.22a6.9 6.9 0 0 1-1.72.72l-.35 2.06h-1.8l-.35-2.06a6.9 6.9 0 0 1-1.72-.72l-1.7 1.22-1.27-1.27 1.22-1.7a6.9 6.9 0 0 1-.72-1.72L3.28 12.9v-1.8l2.06-.35c.17-.62.41-1.19.72-1.72L4.84 7.33 6.11 6.06l1.7 1.22a6.9 6.9 0 0 1 1.72-.72Z",
+      d: "M9.78 2.97A9.3 9.3 0 0 1 14.22 2.97L13.55 5.69A6.5 6.5 0 0 1 16.69 7.5L18.71 5.56A9.3 9.3 0 0 1 20.93 9.41L18.24 10.19A6.5 6.5 0 0 1 18.24 13.81L20.93 14.59A9.3 9.3 0 0 1 18.71 18.44L16.69 16.5A6.5 6.5 0 0 1 13.55 18.31L14.22 21.03A9.3 9.3 0 0 1 9.78 21.03L10.45 18.31A6.5 6.5 0 0 1 7.31 16.5L5.29 18.44A9.3 9.3 0 0 1 3.07 14.59L5.76 13.81A6.5 6.5 0 0 1 5.76 10.19L3.07 9.41A9.3 9.3 0 0 1 5.29 5.56L7.31 7.5A6.5 6.5 0 0 1 10.45 5.69Z",
     },
-    { circle: [12, 12, 2.7] },
+    { circle: [12, 12, 2.6] },
   ],
   /* A report is a warning about something, not a verdict on it — a triangle, not a flag. */
   report: [{ d: "M12 4.2 2.8 20h18.4L12 4.2Z" }, { d: "M12 10.5v4M12 17.4v.01" }],

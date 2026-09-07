@@ -541,11 +541,17 @@ a {
    * the cap stops it from becoming the widest element on a 1600px screen, where a search
    * box the width of the page reads as the page's subject rather than as a tool.
    */
-  flex: 1 1 10rem;
+  /*
+   * Pushed to the right, next to the navigation rather than glued to the wordmark.
+   *
+   * The auto margin is on the left now. Against the wordmark the field read as part of the
+   * brand — one object with a name and a box — and the whole right half of the bar was empty
+   * on a signed-out page. It belongs with the controls it is one of.
+   */
+  flex: 0 1 16rem;
   min-width: 0;
-  max-width: 16rem;
-  margin-left: 1.25rem;
-  margin-right: auto;
+  margin-left: auto;
+  margin-right: 1.25rem;
   height: 2.5rem;
   padding: 0 0.75rem;
   border: 1px solid var(--line);
@@ -600,9 +606,18 @@ a {
   opacity: 1;
 }
 
-/* The ring is on the box; a second one inside it would be two rectangles for one control. */
+/*
+ * The ring is on the box, and this is what takes it off the input.
+ *
+ * Two declarations, because two rules put something there: `:where(a, button, input, …)`
+ * draws the outline every focusable thing on this site gets, and `:where(select, textarea,
+ * input)` adds the same 4px accent glow the box is already drawing. Left alone they nest —
+ * a glow around the field inside a glow around the box — which is what a reader sees rather
+ * than a rule they can name.
+ */
 .masthead__search-input:focus-visible {
   outline: none;
+  box-shadow: none;
 }
 
 /*
@@ -2929,9 +2944,11 @@ a {
   opacity: 1;
 }
 
-/* The ring is on the box; a second one inside it would be two outlines for one control. */
+/* The ring is on the box. Both global rules that would draw a second one are cancelled here,
+   for the reason written out over the masthead's field: a glow inside a glow. */
 .search__input:focus-visible {
   outline: none;
+  box-shadow: none;
 }
 
 .search__input::-webkit-search-decoration,
