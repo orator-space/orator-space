@@ -1,5 +1,6 @@
 ---
 import { jsonLdDocument } from "@orator/core";
+import Avatar from "./Avatar.astro";
 import Icon from "./Icon.astro";
 
 import { defaultCard, docsOrigin, siteOrigin } from "../lib/ports.js";
@@ -123,6 +124,18 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
     */}
     <script src="/top.js" is:inline defer></script>
 
+    {/*
+      §49.1 — the keyboard shortcut that reaches the masthead's search field, and nothing else.
+
+      ADR 0018's three tests, in order: the page works without it, because the field is a real
+      `GET` form and always has been; the `⌘K` badge carries `hidden` in the markup and this
+      removes it; and the script touches focus and one `<details>` element on this device,
+      reaching no network and rendering nothing the page says. Which of `⌘` and `Ctrl` a
+      reader has is exactly the kind of fact §49.1 admits a script for — the server cannot
+      know it, so a server-rendered badge would be wrong for half the readers.
+    */}
+    <script src="/search.js" is:inline defer></script>
+
     {refreshAfter !== null && <meta http-equiv="refresh" content={String(refreshAfter)} />}
 
     {/* §50.3 — noindex until the conditions are met, never the other way round. */}
@@ -200,6 +213,65 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
         <a class="masthead__brand wordmark" href="/">Orator<span class="wordmark__tld">.Space</span></a>
 
         {/*
+          Search, in the bar, on every page (SPEC §38, §49.1).
+
+          It replaces the "Search" link that used to sit in the navigation. A link to a page
+          with a field on it is one navigation, one paint and one focus away from the thing a
+          reader wanted; the field is the thing a reader wanted, and it costs the row one item
+          rather than adding one.
+
+          It is a plain `GET` form and submits to the same `/search` the link led to, so the
+          result is still a shareable, cacheable address (§33.2) and the whole feature works
+          with scripting off. What `search.js` adds is `⌘K`, and the badge saying so is
+          `hidden` until that script has run.
+
+          No suggestions drop out of it as you type, and that is a decision rather than an
+          omission: §49.1 admits no fetch from a page, and §59.1's limiter is sized for a
+          reader pressing Enter rather than for one keystroke each. The documentation site's
+          palette can do it because Pagefind ships a prebuilt index to the browser — an index
+          of a static book. This one is over everything anybody has published, and it changes
+          while it is read.
+        */}
+        {/*
+          On a phone the field becomes the mark, and the mark is a link (§49.1).
+
+          Both are rendered and one is hidden by a media query, because which of them belongs
+          in the bar is a question about the width of the viewport and CSS is what knows that.
+          A 375px bar holding a wordmark, a menu button and a theme control has room for a
+          typing area or for a brand, not both — and a search box too narrow to read a query
+          back in is worse than an honest magnifier, which is one tap from `/search` and its
+          full-width field with the cursor already in it.
+        */}
+        <a class="masthead__search-link" href="/search" aria-label="Search">
+          <Icon name="search" />
+        </a>
+
+        <form class="masthead__search" method="get" action="/search" role="search">
+          <label class="sr-only" for="masthead-q">Search published articles</label>
+          <Icon name="search" class="masthead__search-icon" />
+          <input
+            class="masthead__search-input"
+            id="masthead-q"
+            name="q"
+            type="search"
+            placeholder="Search"
+            maxlength="200"
+            autocomplete="off"
+            data-search-field
+          />
+          {/*
+            The shortcut, named on the control it operates.
+
+            `hidden` in the markup and revealed by `search.js`, which also writes whether this
+            device says `⌘` or `Ctrl` — the badge is a promise, and a promise the page cannot
+            keep with scripting off is worse than silence. `aria-hidden`, because a screen
+            reader user reaching this field by shortcut is not who the badge is for and the
+            field already has a name.
+          */}
+          <kbd class="kbd" data-search-hint aria-hidden="true" hidden></kbd>
+        </form>
+
+        {/*
           Four links, and none of them depends on who is asking.
 
           §33.2 caches an anonymous GET of public content, so the masthead is part of a
@@ -259,21 +331,23 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
           magnifier, Search" says the same thing twice, once badly.
         */}
         <nav class="masthead__nav" aria-label="Site">
-          <a href="/search"><Icon name="search" /> Search</a>
           <a href="/topics"><Icon name="topics" /> Topics</a>
           {/*
-            The one link in the masthead that leaves the site (ADR 0013), and the only place
-            it can be reached from without scrolling to the bottom of an article. A reader
-            who wants the API wants it while reading, not afterwards.
+            No `Docs` here, and that is a decision rather than an omission (ADR 0013).
 
-            It opens in a new tab, which is the reverse of what this comment used to say. The
-            argument for keeping it in place — "the documentation is somewhere to go, not a
-            second window" — is true of a reader who has finished the page and false of the
-            one this link exists for: somebody reading an article who wants to check what a
-            scope is called. Sending them away loses the article. `rel="noopener"` because a
-            page opened with `target` can otherwise reach back through `window.opener`.
+            It was the one link in this bar that left the site, on the argument that somebody
+            reading an article who wants to check the name of a scope should not have to
+            scroll to the footer for it. The argument holds and the placement did not: a
+            documentation site is a destination a builder goes to once and then keeps a tab
+            of, while this bar is read on every page by everybody, most of whom will never
+            call the API. It cost the one control that *is* used from every page — the search
+            field beside it — about five characters of width at every size, and it pushed the
+            row into two lines a hundred pixels sooner.
+
+            It is in the footer under "For builders", it is the first thing on `/llms.txt`,
+            and every page that talks about the API links it in the sentence that mentions it,
+            which is where somebody who wants it is actually looking.
           */}
-          <a href={`${docsOrigin}/`} rel="noopener" target="_blank"><Icon name="docs" /> Docs</a>
           {Astro.locals.viewer && (
             <a href="/bookmarks"><Icon name="bookmarks" /> Bookmarks</a>
           )}
@@ -284,9 +358,45 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
             <a href="/signin"><Icon name="person" /> Account</a>
           ) : (
             <>
-              {/* Their own page, as a reader sees it — which is the point of having one. */}
-              <a href={`/@${Astro.locals.viewer.username}`}><Icon name="person" /> Me</a>
-              <a href="/settings"><Icon name="settings" /> Settings</a>
+              {/*
+                Their own page, as a reader sees it — which is the point of having one.
+
+                Their own face on it, rather than the word "Me". A mark a reader recognises is
+                a shorter thing to read than a pronoun they have to work out refers to them,
+                and it is the one item in this row that is about a specific account rather
+                than a section of the site. The avatar carries its own `aria-label` — `@name`,
+                from `<Avatar>` — which becomes the link's accessible name, so nothing is lost
+                by the word going.
+
+                `<Avatar>` needs a display name, a kind and the uploaded picture; the
+                middleware puts all three on the viewer, from a record it had already read.
+              */}
+              <a class="masthead__self" href={`/@${Astro.locals.viewer.username}`}>
+                <Avatar author={{
+                  username: Astro.locals.viewer.username,
+                  displayName: Astro.locals.viewer.displayName,
+                  kind: Astro.locals.viewer.kind,
+                  avatarMediaId: Astro.locals.viewer.avatarMediaId,
+                }} size={24} />
+                <span class="masthead__word">Me</span>
+              </a>
+              {/*
+                A cog, with no word beside it.
+
+                The word was carrying nothing the shape does not: settings is the one
+                destination on this site whose mark is universal, and dropping it gives the
+                search field about five characters back at every width.
+
+                It is dropped from the *bar* only. Below 68rem the navigation is a panel of
+                rows and every other one is a word, so the two icon-only links keep theirs and
+                the stylesheet clips them where the row becomes a bar — which also means the
+                accessible name is the word itself at every width, rather than an
+                `aria-label` that has to be kept in step with it.
+              */}
+              <a class="masthead__cog" href="/settings">
+                <Icon name="settings" />
+                <span class="masthead__word">Settings</span>
+              </a>
             </>
           )}
         </nav>

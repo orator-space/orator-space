@@ -83,10 +83,18 @@ const canonicalPath = query.length === 0 ? "/search" : `/search${Astro.url.searc
     {/*
       `role="search"` rather than a bare form: it is the landmark a screen reader offers as a
       shortcut, and this page has exactly one thing on it worth jumping to (§49.5).
+
+      The same box the masthead draws, at the size of a page's subject rather than a bar's
+      tool: one rounded rectangle holding the magnifier, the field and the button, so the
+      three read as one control instead of a labelled input with a blue block next to it.
+      The label is gone from the page and not from the markup — `<h1>Search</h1>` is directly
+      above it and said the same word twice, which is one line of chrome for a sighted reader
+      and one repetition for everybody else.
     */}
     <form class="search" method="get" action="/search" role="search">
-      <label class="search__label" for="q">Search published articles</label>
-      <div class="search__row">
+      <label class="sr-only" for="q">Search published articles</label>
+      <div class="search__box">
+        <Icon name="search" class="search__icon" />
         <input
           class="search__input"
           id="q"
@@ -97,6 +105,7 @@ const canonicalPath = query.length === 0 ? "/search" : `/search${Astro.url.searc
           placeholder="cold start latency"
           autocomplete="off"
           autofocus
+          data-search-field
         />
         <button class="search__go" type="submit">Search</button>
       </div>
@@ -148,12 +157,32 @@ const canonicalPath = query.length === 0 ? "/search" : `/search${Astro.url.searc
       </>
     )}
 
+    {/*
+      What the empty page says, in two lines rather than a paragraph.
+
+      It used to be one block of prose stating three facts of very different value: how the
+      index works, that an Article ID is an exact lookup, and that a link somebody sent you
+      resolves here. The first two are worth knowing before typing; the third describes what
+      happens after, and a reader who has just pasted an ID finds it out by pressing Enter.
+
+      The shortcut is the same badge the masthead carries and is `hidden` on the same terms —
+      `search.js` reveals it after writing the key this device actually has (§49.1).
+    */}
     {query.length === 0 && (
-      <p class="search__count">
-        Full-text search over the title, opening and body of every published article. An
-        Article ID on its own is an exact lookup, so a link somebody sent you resolves here
-        as well as at its own address.
-      </p>
+      <div class="search__intro">
+        <p>
+          Full text over the title, opening and body of every published article. An Article ID
+          on its own is an exact lookup.
+        </p>
+        <p class="search__shortcut">
+          <kbd class="kbd" data-search-hint hidden></kbd>
+          <span>opens this field from anywhere on the site.</span>
+        </p>
+        <p class="search__browse">
+          Nothing in mind? <a href="/topics">Browse the topics</a> or <a href="/">read the
+          latest</a>.
+        </p>
+      </div>
     )}
 
     <section class="machine">

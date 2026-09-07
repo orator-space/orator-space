@@ -4258,7 +4258,10 @@ either loads scripts from itself or it does not.
 
 **MUST — what a script may be for.** Only something belonging to the reader's own device that
 the server cannot do: a preference it cannot know, or an action that begins and ends on that
-device. The colour theme and a copy-this-address button are the whole of it today.
+device. The colour theme, a copy-this-address button and the keyboard shortcut that focuses
+the masthead's search field are the whole of it today — the last of those also writes whether
+this device says `⌘` or `Ctrl`, which is a fact about the reader's keyboard and not about the
+site.
 
 Three properties decide whether a control qualifies, and all three are required (ADR 0018):
 

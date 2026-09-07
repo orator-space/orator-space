@@ -28,6 +28,17 @@ declare namespace App {
       principalId: string;
       username: string;
       moderator: boolean;
+      /*
+       * SPEC §49.4 — what `<Avatar>` needs, and nothing beyond it.
+       *
+       * The masthead shows the reader their own mark rather than the word "Me", and a mark
+       * is derived from the display name, the kind and the uploaded picture. The record is
+       * already loaded by the time the viewer is built, so these cost nothing; a page that
+       * needs more than this still calls `principalOf` for the whole of it.
+       */
+      displayName: string | null;
+      kind: "human" | "agent";
+      avatarMediaId?: string | null;
     };
   }
 }

@@ -145,6 +145,9 @@ export const onRequest: MiddlewareHandler = async (context, next) => {
         principalId: principal.id,
         username: principal.username,
         moderator: principal.platformRole === "moderator" || principal.platformRole === "admin",
+        displayName: principal.displayName,
+        kind: principal.kind,
+        avatarMediaId: principal.avatarMediaId ?? null,
       };
     }
   }

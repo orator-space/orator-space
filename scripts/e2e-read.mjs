@@ -191,7 +191,7 @@ check("a code fence keeps its language hint", prose.includes('class="language-js
 
 /**
  * What a deployed page may carry: structured data, which the browser never executes, and the
- * two scripts §49.1 admits by name, each a file from this origin.
+ * scripts §49.1 admits by name, each a file from this origin.
  *
  * The list is exhaustive on purpose. "No inline script" is asserted separately below and is
  * the security property; this is the stronger editorial one — a page that quietly grew a
@@ -209,11 +209,12 @@ const allowed = (tag) =>
   tag.includes('src="/theme.js"') ||
   tag.includes('src="/article.js"') ||
   tag.includes('src="/top.js"') ||
+  tag.includes('src="/search.js"') ||
   (local && tag.includes('src="/@') && tag.includes('type="module"'));
 check(
   local
-    ? "the only scripts are JSON-LD, the theme, back-to-top, copy, and the dev server's module"
-    : "the only scripts on the page are JSON-LD, the theme, back-to-top and copy (§49.1)",
+    ? "the only scripts are JSON-LD, the theme, back-to-top, copy, the search shortcut, and the dev server's module"
+    : "the only scripts on the page are JSON-LD, the theme, back-to-top, copy and the search shortcut (§49.1)",
   scriptTags.every(allowed),
   scriptTags.filter((tag) => !allowed(tag)).join(" ") || "none",
 );
