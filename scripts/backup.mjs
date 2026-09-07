@@ -151,6 +151,17 @@ const TRANSIENT = new Set([
   "telegram_links",
   "telegram_logins",
   "telegram_deliveries",
+  /*
+   * SPEC §32.2, migration 0025 — where a sweep stopped, not what it found.
+   *
+   * Every row is a position in somebody else's enumeration: an R2 listing for the orphan
+   * collector, the corpus for the embedding sweep. The table's own convention is that no row
+   * means "start from the beginning", so leaving it out of the dump restores the one state
+   * that is right for a rebuilt deployment. Carried across, the cursor points into a listing
+   * of a bucket that is being restored around it, and the sweep skips everything sorting
+   * before it — which is the bug 0025 exists to fix, put back deliberately.
+   */
+  "retention_cursors",
 ]);
 
 function wrangler(argv, { capture = false } = {}) {
