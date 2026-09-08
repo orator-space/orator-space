@@ -172,6 +172,7 @@ export {
   mediaOrigin,
   siteHost,
   siteOrigin,
+  statusOrigin,
 } from "./origins.js";
 
 export const environment = web.ENVIRONMENT;

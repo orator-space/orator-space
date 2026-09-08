@@ -99,6 +99,20 @@ export const defaultCard = `${siteOrigin}/card.png`;
 export const docsOrigin = "https://docs.orator.space";
 
 /**
+ * Where the deployment says whether it is up, and the second origin here that is not derived.
+ *
+ * A literal for `docsOrigin`'s reason and not for a second one: there is one status page, it
+ * watches every environment, and `status-staging.orator.space` does not exist. Deriving it
+ * would give staging a hostname that resolves to nothing — which, for the one page somebody
+ * opens when nothing else is answering, is the worst possible thing to be.
+ *
+ * It is a redirect today (to the operator's Gatus, CONTEXT.md), and this is why the site
+ * names the subdomain rather than the instance behind it: the checks can move without a
+ * deployment, and a link in the footer of every page is not a thing to have to change.
+ */
+export const statusOrigin = "https://status.orator.space";
+
+/**
  * Whether this deployment is the one that may appear in a search index (SPEC §50.2, §14.1).
  *
  * Exactly one of them is. Staging serves the same pages from the same zone under a different

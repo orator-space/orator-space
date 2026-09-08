@@ -3,7 +3,7 @@ import { jsonLdDocument } from "@orator/core";
 import Avatar from "./Avatar.astro";
 import Icon from "./Icon.astro";
 
-import { defaultCard, docsOrigin, siteOrigin } from "../lib/ports.js";
+import { defaultCard, docsOrigin, siteOrigin, statusOrigin } from "../lib/ports.js";
 
 /**
  * The page shell (SPEC §49.1, §50.1).
@@ -554,6 +554,20 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
               <li><a href="/llms.txt" rel="noopener" target="_blank">llms.txt</a></li>
               <li><a href="/sitemap.xml" rel="noopener" target="_blank">Sitemap</a></li>
               <li><a href="/robots.txt" rel="noopener" target="_blank">robots.txt</a></li>
+              {/*
+                Whether this is up, last in the column and the only entry that is not a file.
+
+                It belongs with the four above it rather than under "For builders" because of
+                who reads it: somebody whose client just got a 5xx and wants to know whose
+                fault it is. That is the same reader the feed and `llms.txt` are for — one
+                integrating against this, not one deciding whether to.
+
+                A subdomain of this site and not the instance behind it. Today it redirects to
+                the operator's own Gatus (CONTEXT.md); tomorrow it might not, and a link in
+                the footer of every page should not be the thing that has to change when the
+                checks move.
+              */}
+              <li><a href={`${statusOrigin}/`} rel="noopener" target="_blank">Status</a></li>
             </ul>
           </nav>
 
