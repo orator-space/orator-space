@@ -98,6 +98,22 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
     <title>{fullTitle}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonicalUrl} />
+    {/*
+      The two documents with a registered relation, reachable from every page (§48, §80).
+
+      `privacy-policy` and `terms-of-service` are in the HTML link-type table, which admits
+      them on `<link>` as well as on `<a>`. The footer already names both, and a footer is a
+      place a person looks; this is the same statement in the place a machine looks, and this
+      site is read by more of the second kind than the first. It costs about a hundred bytes
+      on a response that is cached at the edge.
+
+      There is deliberately no third tag. The content policy has no registered relation, and
+      inventing `rel="content-policy"` would put a private string in a public registry's
+      namespace — a crawler would ignore it and a reader of the markup would believe it meant
+      something.
+    */}
+    <link rel="privacy-policy" href="/privacy" />
+    <link rel="terms-of-service" href="/terms" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     {feedPath && (
@@ -477,6 +493,12 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
 
             Each link carries its own `aria-label` — the mark is the whole of the content, so
             without one a screen reader announces "link" three times.
+
+            The three profiles carry `rel="me"`, which is the registered way to say "this
+            account is this site". It is a claim rather than a proof until each of them links
+            back the same way — that is what an identity consumer checks, and it is a setting
+            on those three accounts rather than anything in this repository. The feed does not
+            take it: it is a document, not an account.
           */}
           <nav class="social" aria-label="Follow this project">
             <a href="/feed.xml" rel="noopener" target="_blank" aria-label="Atom feed">
@@ -486,17 +508,17 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
                 <path d="M3.5 4.4v2.9A13.6 13.6 0 0 1 17.1 20.9h2.9A16.5 16.5 0 0 0 3.5 4.4Z" />
               </svg>
             </a>
-            <a href="https://x.com/orator_space" rel="noopener" target="_blank" aria-label="Orator.Space on X">
+            <a href="https://x.com/orator_space" rel="me noopener" target="_blank" aria-label="Orator.Space on X">
               <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.68l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z" />
               </svg>
             </a>
-            <a href="https://t.me/orator_space" rel="noopener" target="_blank" aria-label="Orator.Space on Telegram">
+            <a href="https://t.me/orator_space" rel="me noopener" target="_blank" aria-label="Orator.Space on Telegram">
               <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M21.9 4.3 18.6 20a1.2 1.2 0 0 1-1.9.7l-4.6-3.4-2.2 2.2a.7.7 0 0 1-1.2-.4l-.5-4.3 8.2-7.4c.3-.3-.1-.5-.5-.2L5.7 13.6l-3.4-1.1c-.8-.3-.8-1.4.1-1.7l18-6.9c.7-.3 1.4.2 1.5 1Z" />
               </svg>
             </a>
-            <a href="https://github.com/orator-space" rel="noopener" target="_blank" aria-label="Orator.Space on GitHub">
+            <a href="https://github.com/orator-space" rel="me noopener" target="_blank" aria-label="Orator.Space on GitHub">
               <svg class="brand-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.8 8.2 11.39.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.75.08-.73.08-.73 1.2.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .11-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.96 0-1.32.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.29-1.55 3.3-1.23 3.3-1.23.66 1.65.24 2.87.12 3.18.77.84 1.24 1.91 1.24 3.23 0 4.63-2.8 5.65-5.48 5.95.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5Z" />
               </svg>
@@ -598,8 +620,17 @@ const fullTitle = canonicalPath === "/" ? "Orator.Space" : `${title} — Orator.
           <nav class="footer__group" aria-label="The rules">
             <h2>The rules</h2>
             <ul>
-              <li><a href="/terms">Terms</a></li>
-              <li><a href="/privacy">Privacy</a></li>
+              {/*
+                Two of the three carry a registered relation and the third has none.
+
+                `terms-of-service` and `privacy-policy` are in the HTML link-type table, and
+                the head of every page carries the same pair as `<link>`. `Content policy` is
+                left plain on purpose: there is no registered relation for it, and a made-up
+                one is worse than none — a crawler ignores it and a person reading the markup
+                assumes it means something.
+              */}
+              <li><a href="/terms" rel="terms-of-service">Terms</a></li>
+              <li><a href="/privacy" rel="privacy-policy">Privacy</a></li>
               <li><a href="/content-policy">Content policy</a></li>
             </ul>
           </nav>
